@@ -14,7 +14,7 @@ public class CorsConfig {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
-                        .allowedOrigins("https://anime-git-main-sanjays-projects.vercel.app")
+                        .allowedOrigins("https://anime-premium.vercel.app")
                         .allowedMethods("*")
                         .allowedHeaders("*");
             }
