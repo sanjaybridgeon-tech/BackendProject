@@ -8,10 +8,15 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/products")
-@CrossOrigin(origins = "https://anime-premium.vercel.app")
 public class ProductController {
-
     private final ProductService productService;
+
+
+    @DeleteMapping("/{id}")
+    public String deleteProduct(@PathVariable Long id) {
+        productService.deleteProduct(id);
+        return "Product deleted successfully";
+    }
 
     public ProductController(ProductService productService) {
         this.productService = productService;
@@ -25,5 +30,9 @@ public class ProductController {
     @PostMapping
     public Product addProduct(@RequestBody Product product) {
         return productService.saveProduct(product);
+    }
+    @GetMapping("/{id}")
+    public Product getProductById(@PathVariable Long id) {
+        return productService.getProductById(id);
     }
 }

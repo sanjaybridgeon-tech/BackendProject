@@ -1,17 +1,22 @@
 package application.demo.entity;
+
 import jakarta.persistence.*;
 import lombok.Data;
 
 @Entity
 @Data
-@Table(name = "users")
-public class User {
+public class CartItem {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true)
-    private String email;
-    private String password;
+    private Long userId;
+    private Long productId;
+
+    private String name;
+    private double price;
+    private String imageUrl;
+
+    private int quantity;
 }

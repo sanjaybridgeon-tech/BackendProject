@@ -2,6 +2,7 @@ package application.demo.controller;
 
 import application.demo.entity.User;
 import application.demo.repository.UserRepository;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -15,22 +16,29 @@ public class AuthController {
         this.userRepository = userRepository;
     }
 
-    // Register
+    // ✅ REGISTER
     @PostMapping("/register")
     public User register(@RequestBody User user) {
         return userRepository.save(user);
     }
 
-    // Login
+    // ✅ LOGIN
     @PostMapping("/login")
-    public String login(@RequestBody User user) {
+    public ResponseEntity<?> login(@RequestBody User user) {
+
         User existing = userRepository.findByEmail(user.getEmail())
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         if (!existing.getPassword().equals(user.getPassword())) {
-            throw new RuntimeException("Invalid password");
+            return ResponseEntity.status(401).body("Invalid password");
         }
 
-        return "LOGIN SUCCESS";
+        // 🔥 TEMP TOKEN (later JWT)
+        return ResponseEntity.ok(existing.getId());
+    }
+    @DeleteMapping("/{id}")
+    public String deleteUser(@PathVariable Long id) {
+        userRepository.deleteById(id);
+        return "User deleted successfully";
     }
 }
