@@ -25,6 +25,9 @@ public class ProductService {
         return productRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Product not found"));
     }
+    public List<Product> searchProducts(String search) {
+        return productRepository.findByNameContainingIgnoreCase(search);
+    }
 
     public Product saveProduct(Product product) {
         return productRepository.save(product);
