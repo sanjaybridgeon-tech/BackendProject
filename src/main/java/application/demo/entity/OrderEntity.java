@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Data
@@ -17,9 +18,12 @@ public class OrderEntity {
     private Long userId;
     private double amount;
     private String paymentId;
+    private String status;
 
     private LocalDateTime createdAt;
 
     @Embedded
     private Address address;
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+    private List<OrderItem> items;
 }

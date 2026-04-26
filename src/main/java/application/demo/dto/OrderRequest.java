@@ -3,6 +3,8 @@ package application.demo.dto;
 import application.demo.entity.Address;
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 public class OrderRequest {
 
@@ -10,4 +12,7 @@ public class OrderRequest {
     private double amount;
     private String paymentId;
     private Address address;
+
+    // 🔥 ADD THIS
+    private List<OrderItemDTO> items;
 }
