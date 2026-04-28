@@ -2,6 +2,7 @@ package application.demo.controller;
 
 import application.demo.entity.Product;
 import application.demo.service.ProductService;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,15 +20,18 @@ public class ProductController {
 
     // 📦 Get all / search
     @GetMapping
-    public List<Product> getProducts(@RequestParam(required = false) String search) {
+    public Page<Product> getProducts(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "6") int size,
+            @RequestParam(required = false) String search
+    ) {
 
         if (search != null && !search.trim().isEmpty()) {
-            return productService.searchProducts(search);
+            return productService.searchProducts(search, page, size);
         }
 
-        return productService.getAllProducts();
+        return productService.getProducts(page, size);
     }
-
     // ➕ Add product
     @PostMapping
     public Product addProduct(@RequestBody Product product) {
