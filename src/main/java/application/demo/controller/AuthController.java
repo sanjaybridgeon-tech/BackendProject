@@ -1,5 +1,8 @@
 package application.demo.controller;
 
+import application.demo.dto.LoginRequestDTO;
+import application.demo.dto.RegisterRequestDTO;
+import application.demo.dto.UserResponseDTO;
 import application.demo.entity.Role;
 import application.demo.entity.User;
 import application.demo.repository.UserRepository;
@@ -20,24 +23,23 @@ public class AuthController {
     public AuthController(AuthService authService) {
         this.authService = authService;
     }
-//    public AuthController(UserRepository userRepository) {
-//        this.userRepository = userRepository;
-//    }
+
+
 
     // ✅ REGISTER
     @PostMapping("/register")
-    public User register(@RequestBody User user) {
-        return authService.register(user);
+    public UserResponseDTO register(@RequestBody RegisterRequestDTO dto) {
+        return authService.register(dto);
     }
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody User user) {
+    public ResponseEntity<?> login(@RequestBody LoginRequestDTO dto) {
 
         try {
-            User existing = authService.login(user.getEmail(), user.getPassword());
+            UserResponseDTO user = authService.login(dto);
 
             return ResponseEntity.ok(Map.of(
-                    "id", existing.getId(),
-                    "role", existing.getRole()
+                    "id", user.getId(),
+                    "role", user.getRole()
             ));
 
         } catch (RuntimeException e) {
@@ -55,7 +57,7 @@ public class AuthController {
         }
     }
     @GetMapping("/all")
-    public List<User> getAllUsers() {
+    public List<UserResponseDTO> getAllUsers() {
         return authService.getAllUsers();
     }
 
@@ -65,42 +67,3 @@ public class AuthController {
 
 }
 
-    // ✅ LOGIN
-//    @PostMapping("/login")
-//    public ResponseEntity<?> login(@RequestBody User user) {
-//
-//        Optional<User> existingUser = userRepository.findByEmail(user.getEmail());
-//
-//        if (existingUser.isEmpty()) {
-//            return ResponseEntity.status(404).body("User not found");
-//        }
-//
-//        User existing = existingUser.get(); // ✅ safe now
-//
-//        if (!existing.getPassword().equals(user.getPassword())) {
-//            return ResponseEntity.status(401).body("Invalid password");
-//        }
-//
-//        // 🔥 TEMP TOKEN (later JWT)
-//        return ResponseEntity.ok(Map.of(
-//                "id", existing.getId(),
-//                "role", existing.getRole()
-//        ));
-//    }
-//    @DeleteMapping("/{id}")
-//    public ResponseEntity<?> deleteUser(@PathVariable Long id,
-//                                        @RequestParam String role) {
-//
-//        if (!role.equals("ADMIN")) {
-//            return ResponseEntity.status(403).body("Only admin allowed");
-//        }
-//
-//        userRepository.deleteById(id);
-//        return ResponseEntity.ok("User deleted successfully");
-//    }
-//    // ✅ Get all users
-//    @GetMapping("/all")
-//    public List<User> getAllUsers() {
-//        return userRepository.findAll();
-//    }
-//}
